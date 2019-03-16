@@ -2,6 +2,7 @@ package com.moahammedomer.networkingliberaries;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button b, select;
     EditText edit, name;
-    public static String response_url = "http://192.168.43.32/request_data.php";
+    private String response_url = "http://192.168.43.32/test.php";
     ImageView imageView;
     final static int IMAGE_REQUEST = 100;
     @Override
@@ -54,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                response_url = edit.getText().toString();
                 StringRequest request = new StringRequest(Request.Method.POST, response_url,
                         new Response.Listener<String>() {
                             @Override
@@ -78,8 +78,9 @@ public class MainActivity extends AppCompatActivity {
                         Map<String, String > map = new HashMap<>();
                         map.put("name", name.getText().toString());
                         imageView.buildDrawingCache();
-                        Bitmap bmap = imageView.getDrawingCache();
-                        map.put("image", imageToString(bmap));
+                        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                        Bitmap bitmap = drawable.getBitmap();
+                        map.put("image", imageToString(bitmap)); "technique"
                         return map;
                     }
                 };

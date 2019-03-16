@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -30,6 +31,7 @@ public class Main2Activity extends AppCompatActivity {
     MyRecyclerViewAdapter adapter;
     ArrayList<Product> list;
     ProgressBar progressBar;
+    private String response_url = "http://192.168.43.32/request_data.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +68,7 @@ public class Main2Activity extends AppCompatActivity {
 
     private void loadProductList(){
 
-        StringRequest request = new StringRequest(MainActivity.response_url,
+        StringRequest request = new StringRequest(Request.Method.GET, response_url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
