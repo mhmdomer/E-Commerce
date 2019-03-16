@@ -79,12 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         map.put("name", name.getText().toString());
                         imageView.buildDrawingCache();
                         Bitmap bmap = imageView.getDrawingCache();
-                        if (imageView.getDrawable() != null){
-                            map.put("image", imageToString(bmap));
-                        }
-                        else{
-                            map.put("image", null);
-                        }
+                        map.put("image", imageToString(bmap));
                         return map;
                     }
                 };

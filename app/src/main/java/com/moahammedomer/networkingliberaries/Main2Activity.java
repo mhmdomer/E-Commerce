@@ -3,8 +3,10 @@ package com.moahammedomer.networkingliberaries;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -35,7 +37,11 @@ public class Main2Activity extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         recyclerView = findViewById(R.id.recycler);
         progressBar = findViewById(R.id.progress);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                layoutManager.getOrientation());
+        recyclerView.addItemDecoration(dividerItemDecoration);
         list = new ArrayList<>();
         adapter = new MyRecyclerViewAdapter(this, list);
         loadProductList();
@@ -64,6 +70,8 @@ public class Main2Activity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Toast.makeText(Main2Activity.this, response, Toast.LENGTH_SHORT).show();
+                        Log.e("main2", response);
                         try {
                             JSONArray array = new JSONArray(response);
                             for(int i = 0; i < array.length(); i++){

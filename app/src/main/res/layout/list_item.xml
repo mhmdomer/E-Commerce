@@ -1,51 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:orientation="horizontal"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="8dp" >
 
+    <!-- Image -->
     <ImageView
-        android:layout_width="140dp"
-        android:layout_height="140dp"
         android:id="@+id/item_image"
-        android:layout_marginRight="10dp"/>
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_add"
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="8dp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
+    <!-- Title -->
+    <TextView
+        android:id="@+id/item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/item_image"
+        android:layout_toRightOf="@id/item_image"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textSize="@dimen/title"
+        android:text="Title"
+        android:textStyle="bold" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+    <!-- Price -->
+    <TextView
+        android:id="@+id/price"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_name"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:layout_marginTop="1dip"
+        android:layout_toRightOf="@id/item_image"
+        android:textSize="@dimen/price" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20sp"
-                android:textSize="20sp"
-                android:id="@+id/item_name"
-                android:text="Title"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/price"
-                android:textSize="20sp"
-                android:text="34 SDG"
-                />
-        </LinearLayout>
+    <!-- Description -->
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/price"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/item_image"
+        android:textColor="@color/description"
+        android:maxLines="1"
+        android:textSize="@dimen/description" />
 
-        <TextView
-            android:id="@+id/description"
-            android:layout_width="245dp"
-            android:layout_height="113dp"
-            android:layout_below="@id/item_name"
-            android:layout_marginLeft="-1dp"
-            android:layout_toRightOf="@id/item_image"
-            android:maxHeight="300dp"
-            android:layout_marginRight="14dp"
-            android:text="description here" />
-    </LinearLayout>
-</LinearLayout>
+    <!--&lt;!&ndash; Release Year &ndash;&gt;-->
+    <!--<TextView-->
+        <!--android:id="@+id/company"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:textColor="@color/year"-->
+        <!--android:textSize="@dimen/year" />-->
+
+</RelativeLayout>
