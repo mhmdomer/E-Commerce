@@ -18,17 +18,23 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     private ArrayList<Product> myList;
     private LayoutInflater mInflater;
-    private String server_images_url = "http://192.168.43.32/imageUpload/";
+    private String server_images_url = "http://095c6044.ngrok.io/imageUpload/";
+    private OnItemClickListener listener;
 
-    MyRecyclerViewAdapter(Context context, ArrayList<Product> data){
+    public interface OnItemClickListener{
+        void onItemClick(View view, int position);
+    }
+
+    MyRecyclerViewAdapter(Context context, ArrayList<Product> data, OnItemClickListener listener){
         this.mInflater = LayoutInflater.from(context);
         this.myList = data;
+        this.listener = listener;
     }
     @NonNull
     @Override
     public MyRecyclerViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = mInflater.inflate(R.layout.list_item, viewGroup, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view, listener);
     }
 
     @Override
@@ -48,17 +54,32 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         return myList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+
+    public void setOnItemListener(OnItemClickListener listener){
+        this.listener = listener;
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView title, description, price;
         ImageView image;
+        private OnItemClickListener mListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
+            mListener = listener;
+            itemView.setOnClickListener(this);
             title = itemView.findViewById(R.id.item_name);
             description = itemView.findViewById(R.id.description);
             price = itemView.findViewById(R.id.price);
             image = itemView.findViewById(R.id.item_image);
         }
+
+        @Override
+        public void onClick(View v) {
+            mListener.onItemClick(v, getAdapterPosition());
+        }
     }
+
+
 }

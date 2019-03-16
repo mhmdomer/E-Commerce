@@ -14,9 +14,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -29,9 +31,10 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    ProgressBar progressBar;
     Button b, select;
-    EditText edit, name;
-    private String response_url = "http://192.168.43.32/test.php";
+    EditText name;
+    private String response_url = "http://095c6044.ngrok.io/test.php";
     ImageView imageView;
     final static int IMAGE_REQUEST = 100;
     @Override
@@ -41,9 +44,9 @@ public class MainActivity extends AppCompatActivity {
 
         b = findViewById(R.id.button);
         select = findViewById(R.id.img_select);
-        edit = findViewById(R.id.edit);
         name = findViewById(R.id.name);
         imageView = findViewById(R.id.img);
+        progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleSmall);
         select.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Please select an Image and a name", Toast.LENGTH_SHORT).show();
                 }
                 else{
-
+                    b.setClickable(false);
                     StringRequest request = new StringRequest(Request.Method.POST, response_url,
                             new Response.Listener<String>() {
                                 @Override
@@ -68,7 +71,6 @@ public class MainActivity extends AppCompatActivity {
 
                                     Toast.makeText(MainActivity.this, response, Toast.LENGTH_LONG).show();
                                     name.setText("");
-                                    edit.setText("");
                                     imageView.setImageBitmap(null);
                                     startActivity(new Intent(MainActivity.this, Main2Activity.class));
 
@@ -85,13 +87,16 @@ public class MainActivity extends AppCompatActivity {
                             map.put("name", name.getText().toString());
                             imageView.buildDrawingCache();
                             BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
-                            Log.e("main", "drawable not null");
                             Bitmap bitmap = drawable.getBitmap();
                             map.put("image", imageToString(bitmap));
 
                             return map;
                         }
                     };
+                    request.setRetryPolicy(new DefaultRetryPolicy(
+                            0,
+                            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                     MySingleton.getInstance(MainActivity.this).addToRequestQueue(request);
                 }
 
