@@ -9,6 +9,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,36 +56,44 @@ public class MainActivity extends AppCompatActivity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                StringRequest request = new StringRequest(Request.Method.POST, response_url,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
+                if(imageView.getDrawable() == null || name.getText().toString().isEmpty()){
+                    Toast.makeText(MainActivity.this, "Please select an Image and a name", Toast.LENGTH_SHORT).show();
+                }
+                else{
 
-                                Toast.makeText(MainActivity.this, response, Toast.LENGTH_LONG).show();
-                                name.setText("");
-                                edit.setText("");
-                                imageView.setImageBitmap(null);
-                                startActivity(new Intent(MainActivity.this, Main2Activity.class));
+                    StringRequest request = new StringRequest(Request.Method.POST, response_url,
+                            new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
 
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(MainActivity.this, "Something went wrong!", Toast.LENGTH_LONG).show();
-                    }
-                }){
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String > map = new HashMap<>();
-                        map.put("name", name.getText().toString());
-                        imageView.buildDrawingCache();
-                        BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
-                        Bitmap bitmap = drawable.getBitmap();
-                        map.put("image", imageToString(bitmap)); "technique"
-                        return map;
-                    }
-                };
-                MySingleton.getInstance(MainActivity.this).addToRequestQueue(request);
+                                    Toast.makeText(MainActivity.this, response, Toast.LENGTH_LONG).show();
+                                    name.setText("");
+                                    edit.setText("");
+                                    imageView.setImageBitmap(null);
+                                    startActivity(new Intent(MainActivity.this, Main2Activity.class));
+
+                                }
+                            }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(MainActivity.this, "Something went wrong!", Toast.LENGTH_LONG).show();
+                        }
+                    }){
+                        @Override
+                        protected Map<String, String> getParams() throws AuthFailureError {
+                            Map<String, String > map = new HashMap<>();
+                            map.put("name", name.getText().toString());
+                            imageView.buildDrawingCache();
+                            BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
+                            Log.e("main", "drawable not null");
+                            Bitmap bitmap = drawable.getBitmap();
+                            map.put("image", imageToString(bitmap));
+
+                            return map;
+                        }
+                    };
+                    MySingleton.getInstance(MainActivity.this).addToRequestQueue(request);
+                }
 
             }
 
