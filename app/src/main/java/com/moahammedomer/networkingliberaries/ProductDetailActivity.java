@@ -47,13 +47,13 @@ public class ProductDetailActivity extends AppCompatActivity {
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Dialog d = new Dialog(ProductDetailActivity.this);
-//                d.setContentView(R.layout.image_layout);
-//                ImageView imageView = findViewById(R.id.image_preview);
-//                Glide.with(ProductDetailActivity.this)
-//                        .load(intent.getExtras().getString(Main2Activity.IMAGE_EXTRA))
-//                        .into(imageView);
-//                d.show();
+                Dialog d = new Dialog(ProductDetailActivity.this);
+                d.setContentView(R.layout.image_layout);
+                ImageView imageView = d.findViewById(R.id.image_preview);
+                Glide.with(ProductDetailActivity.this)
+                        .load(intent.getExtras().getString(Main2Activity.IMAGE_EXTRA))
+                        .into(imageView);
+                d.show();
             }
         });
 

@@ -33,10 +33,10 @@ public class Main2Activity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     MyRecyclerViewAdapter adapter;
-    ArrayList<Product> list;
+    ArrayList<Product> allProducts;
     ProgressBar progressBar;
     SearchView sv;
-    private String response_url = "http://09950569.ngrok.io/request_data.php";
+    private String response_url = "http://cb70b372.ngrok.io/request_data.php";
     private String searchString;
     public static final String NAME_EXTRA = "name";
     public static final String IMAGE_EXTRA = "image";
@@ -44,6 +44,7 @@ public class Main2Activity extends AppCompatActivity {
     public static final String PRICE_EXTRA = "price";
     public static final String COUNTRY_EXTRA = "country";
     public static final String CATEGORY_EXTRA = "category";
+    MyRecyclerViewAdapter.OnItemClickListener listener;
 
 
     @Override
@@ -62,10 +63,10 @@ public class Main2Activity extends AppCompatActivity {
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-        list = new ArrayList<>();
-        MyRecyclerViewAdapter.OnItemClickListener listener = (view, position) ->{
+        allProducts = new ArrayList<>();
+        listener = (view, position) ->{
             Intent intent = new Intent(Main2Activity.this, ProductDetailActivity.class);
-            Product product = list.get(position);
+            Product product = allProducts.get(position);
             intent.putExtra(NAME_EXTRA, product.getName());
             intent.putExtra(PRICE_EXTRA, product.getPrice());
             intent.putExtra(DESCRIPTION_EXTRA, product.getDescription());
@@ -75,7 +76,7 @@ public class Main2Activity extends AppCompatActivity {
             startActivity(intent);
 
         };
-        adapter = new MyRecyclerViewAdapter(this, list, listener);
+        adapter = new MyRecyclerViewAdapter(this, allProducts, listener);
         searchString = "";
         loadProductList();
     }
@@ -121,10 +122,10 @@ public class Main2Activity extends AppCompatActivity {
                         Log.e("mian", response);
                         try {
                             JSONArray array = new JSONArray(response);
-                            list.clear();
+                            allProducts.clear();
                             for(int i = 0; i < array.length(); i++){
                                 JSONObject object = array.getJSONObject(i);
-                                list.add(new Product(object.getInt("id"),
+                                allProducts.add(new Product(object.getInt("id"),
                                         object.getString("name"),
                                         object.getDouble("price"),
                                         object.getString("description"),
@@ -161,33 +162,29 @@ public class Main2Activity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.e("main", "onSubmit");
-                list = getMatchProducts(query);
-                Log.e("main", String.valueOf(list.size()));
-                adapter.notifyDataSetChanged();
-                return false;
+                getMatchProducts(query);
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.e("main", "onChange");
-                list = getMatchProducts(newText);
-                Log.e("main", String.valueOf(adapter.getItemCount()));
-                adapter.notifyDataSetChanged();
+                getMatchProducts(newText);
                 return true;
             }
         });
     }
 
-    public ArrayList<Product> getMatchProducts(String search){
+    public void getMatchProducts(String search){
         ArrayList<Product> arrayList = new ArrayList<>();
-        int length = list.size();
+        int length = allProducts.size();
         for(int i = 0; i < length; i++){
-            if(list.get(i).getName().contains(search)){
-                arrayList.add(list.get(i));
+            Log.e("main", search + " : " + allProducts.get(i).getName() + " " + allProducts.get(i).getName().contains(search));
+            if(allProducts.get(i).getName().contains(search)){
+                arrayList.add(allProducts.get(i));
             }
         }
         Log.e("main", "arraylist size : " + arrayList.size());
-        return arrayList;
+        adapter = new MyRecyclerViewAdapter(this, arrayList, listener);
+        recyclerView.setAdapter(adapter);
     }
 }

@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     Button b, select;
     EditText name;
-    private String response_url = "http://09950569.ngrok.io/test.php";
+    private String response_url = "http://cb70b372.ngrok.io/test.php";
     ImageView imageView;
     final static int IMAGE_REQUEST = 100;
     Uri imageUri;
