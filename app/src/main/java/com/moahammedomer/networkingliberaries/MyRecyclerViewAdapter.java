@@ -61,6 +61,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
                     @Override
                     public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
                         viewHolder.progressBar.setVisibility(View.GONE);
+                        viewHolder.image.setImageDrawable(resource);
                         return true;
                     }
                 })
