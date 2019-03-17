@@ -11,7 +11,6 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     Button b, select;
     EditText name;
-    private String response_url = "http://8e4940cb.ngrok.io/test.php";
+    private String response_url = "http://09950569.ngrok.io/test.php";
     ImageView imageView;
     final static int IMAGE_REQUEST = 100;
     Uri imageUri;

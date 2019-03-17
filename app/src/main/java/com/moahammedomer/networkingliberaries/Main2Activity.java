@@ -6,13 +6,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -36,8 +36,15 @@ public class Main2Activity extends AppCompatActivity {
     ArrayList<Product> list;
     ProgressBar progressBar;
     SearchView sv;
-    private String response_url = "http://8e4940cb.ngrok.io/request_data.php";
+    private String response_url = "http://09950569.ngrok.io/request_data.php";
     private String searchString;
+    public static final String NAME_EXTRA = "name";
+    public static final String IMAGE_EXTRA = "image";
+    public static final String DESCRIPTION_EXTRA = "description";
+    public static final String PRICE_EXTRA = "price";
+    public static final String COUNTRY_EXTRA = "country";
+    public static final String CATEGORY_EXTRA = "category";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,19 +57,34 @@ public class Main2Activity extends AppCompatActivity {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
+        // for caching images
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         list = new ArrayList<>();
         MyRecyclerViewAdapter.OnItemClickListener listener = (view, position) ->{
-            Toast.makeText(Main2Activity.this, "you clicked " + list.get(position).getName(), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Main2Activity.this, ProductDetailActivity.class);
+            Product product = list.get(position);
+            intent.putExtra(NAME_EXTRA, product.getName());
+            intent.putExtra(PRICE_EXTRA, product.getPrice());
+            intent.putExtra(DESCRIPTION_EXTRA, product.getDescription());
+            intent.putExtra(COUNTRY_EXTRA, product.getCountry());
+            intent.putExtra(CATEGORY_EXTRA, product.getCategory());
+            intent.putExtra(IMAGE_EXTRA, product.getImageUrl());
+            startActivity(intent);
+
         };
         adapter = new MyRecyclerViewAdapter(this, list, listener);
         searchString = "";
+        loadProductList();
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        loadProductList();
+//        loadProductList();
     }
 
     @Override
@@ -83,7 +105,7 @@ public class Main2Activity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.search:
-                Log.e("main", "text changing..");
+                //
 
         }
     return true;
@@ -126,8 +148,8 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-                Log.e("main", "search string " + searchString);
-                map.put("search", searchString);
+//                Log.e("main", "search string " + searchString);
+//                map.put("search", searchString);
                 return map;
             }
         };
@@ -136,23 +158,36 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     private void search(SearchView searchView) {
-        Log.e("main", "searching");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.e("main", "onSubmit");
-                searchString = query;
-                loadProductList();
+                list = getMatchProducts(query);
+                Log.e("main", String.valueOf(list.size()));
+                adapter.notifyDataSetChanged();
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.e("main", "onChange");
-                searchString = newText;
-                loadProductList();
+                list = getMatchProducts(newText);
+                Log.e("main", String.valueOf(adapter.getItemCount()));
+                adapter.notifyDataSetChanged();
                 return true;
             }
         });
+    }
+
+    public ArrayList<Product> getMatchProducts(String search){
+        ArrayList<Product> arrayList = new ArrayList<>();
+        int length = list.size();
+        for(int i = 0; i < length; i++){
+            if(list.get(i).getName().contains(search)){
+                arrayList.add(list.get(i));
+            }
+        }
+        Log.e("main", "arraylist size : " + arrayList.size());
+        return arrayList;
     }
 }

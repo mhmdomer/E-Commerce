@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingLeft="12dp"
     tools:context=".ProductDetailActivity">
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="260dp"
         android:src="@drawable/ic_add"
         android:id="@+id/detail_image"
         android:layout_margin="8dp"/>
@@ -25,17 +26,43 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Description:"
-        android:layout_marginBottom="8dp"
+        android:id="@+id/detail_country"
         android:layout_below="@id/detail_price"
-        android:id="@+id/detail_description_label"
-        android:textStyle="bold"/>
+        android:layout_marginBottom="10dp"
+        android:text="Sudan"
+        android:layout_alignParentStart="true"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/detail_description"
-        android:layout_below="@id/detail_description_label"
-        android:layout_margin="10dp"/>
+        android:id="@+id/detial_category"
+        android:layout_below="@id/detail_country"
+        android:layout_marginBottom="10dp"
+        android:text="Medical"/>
+
+    <TextView
+        android:id="@+id/detail_description_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detial_category"
+        android:layout_marginBottom="8dp"
+        android:text="Description:"
+        android:textStyle="bold" />
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/detail_order"
+        android:layout_below="@id/detail_description_label">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detail_description"
+            android:text="some description"
+            android:layout_below="@id/scroll"
+            android:layout_margin="10dp"/>
+
+    </ScrollView>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
