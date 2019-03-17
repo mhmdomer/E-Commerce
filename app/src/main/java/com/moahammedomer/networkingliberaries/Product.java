@@ -1,21 +1,22 @@
 package com.moahammedomer.networkingliberaries;
 
-import com.android.volley.toolbox.StringRequest;
-
 public class Product {
 
-    private int id;
-    private String name, description, image_url;
-    private boolean inStock;
-    private float price;
+    private String name, description, category, country;
+    private double price;
+    private String server_images_url = "http://8e4940cb.ngrok.io/imageUpload/";
 
-    Product(String name, String description, boolean inStock, float price, int id){
-        this.description = description;
-        this.name = name;
-        this.image_url = "" + id + ".jpg";
-        this.inStock = inStock;
-        this.price = price;
+    Product(int id, String name, double price, String description, String category, String country){
         this.id = id;
+        this.name = name;
+        this.price = price;
+        this.description = description;
+        this.category = category;
+        this.country = country;
+    }
+
+    public String getImageUrl(){
+        return server_images_url + getId() + ".jpg";
     }
 
     public void setId(int id) {
@@ -30,17 +31,19 @@ public class Product {
         this.description = description;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public void setInStock(boolean inStock) {
-        this.inStock = inStock;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public void setPrice(float price) {
         this.price = price;
     }
+
+    private int id;
 
     public int getId() {
         return id;
@@ -54,15 +57,16 @@ public class Product {
         return description;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getCategory() {
+        return category;
     }
 
-    public boolean isInStock() {
-        return inStock;
+    public String getCountry() {
+        return country;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
+
 }

@@ -9,8 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.NetworkImageView;
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -18,7 +17,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
 
     private ArrayList<Product> myList;
     private LayoutInflater mInflater;
-    private String server_images_url = "http://095c6044.ngrok.io/imageUpload/";
     private OnItemClickListener listener;
 
     public interface OnItemClickListener{
@@ -43,9 +41,9 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         viewHolder.price.setText(String.valueOf(product.getPrice()));
         viewHolder.description.setText(product.getDescription());
         viewHolder.title.setText(product.getName());
-        Picasso.get()
-                .load(server_images_url + product.getId() + ".jpg")
-                .resize(100, 100)
+        Glide.with(viewHolder.itemView.getContext())
+                .load(product.getImageUrl())
+                .override(200, 200)
                 .into(viewHolder.image);
     }
 

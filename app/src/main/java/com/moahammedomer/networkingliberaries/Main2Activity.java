@@ -36,7 +36,7 @@ public class Main2Activity extends AppCompatActivity {
     ArrayList<Product> list;
     ProgressBar progressBar;
     SearchView sv;
-    private String response_url = "http://095c6044.ngrok.io/request_data.php";
+    private String response_url = "http://8e4940cb.ngrok.io/request_data.php";
     private String searchString;
 
     @Override
@@ -96,16 +96,18 @@ public class Main2Activity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
+                        Log.e("mian", response);
                         try {
                             JSONArray array = new JSONArray(response);
                             list.clear();
                             for(int i = 0; i < array.length(); i++){
                                 JSONObject object = array.getJSONObject(i);
-                                list.add(new Product(object.getString("name"),
+                                list.add(new Product(object.getInt("id"),
+                                        object.getString("name"),
+                                        object.getDouble("price"),
                                         object.getString("description"),
-                                        false,
-                                        object.getInt("price"),
-                                        object.getInt("id")));
+                                        object.getString("category"),
+                                        object.getString("country")));
                             }
                             progressBar.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.VISIBLE);

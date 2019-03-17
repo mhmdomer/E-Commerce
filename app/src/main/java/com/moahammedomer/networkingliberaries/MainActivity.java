@@ -2,6 +2,8 @@ package com.moahammedomer.networkingliberaries;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,9 +36,11 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     Button b, select;
     EditText name;
-    private String response_url = "http://095c6044.ngrok.io/test.php";
+    private String response_url = "http://8e4940cb.ngrok.io/test.php";
     ImageView imageView;
     final static int IMAGE_REQUEST = 100;
+    Uri imageUri;
+    byte [] BYTE;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Please select an Image and a name", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    b.setClickable(false);
                     StringRequest request = new StringRequest(Request.Method.POST, response_url,
                             new Response.Listener<String>() {
                                 @Override
@@ -88,7 +91,11 @@ public class MainActivity extends AppCompatActivity {
                             imageView.buildDrawingCache();
                             BitmapDrawable drawable = (BitmapDrawable) imageView.getDrawable();
                             Bitmap bitmap = drawable.getBitmap();
-                            map.put("image", imageToString(bitmap));
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 70, bos);
+                            BYTE = bos.toByteArray();
+                            Bitmap bt2 = BitmapFactory.decodeByteArray(BYTE, 0, BYTE.length);
+                            map.put("image", imageToString(bt2));
 
                             return map;
                         }
@@ -108,9 +115,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == IMAGE_REQUEST && resultCode == RESULT_OK){
-            Uri imageUri = data.getData();
+            imageUri = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                Bitmap bitmap = getResizedBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri),
+                        320,
+                        320);
                 imageView.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -120,8 +129,25 @@ public class MainActivity extends AppCompatActivity {
 
     private String imageToString(Bitmap bitmap){
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte[] imgBytes = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(imgBytes, Base64.DEFAULT);
+    }
+
+    public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float scaleWidth = ((float) newWidth) / width;
+        float scaleHeight = ((float) newHeight) / height;
+        // CREATE A MATRIX FOR THE MANIPULATION
+        Matrix matrix = new Matrix();
+        // RESIZE THE BIT MAP
+        matrix.postScale(scaleWidth, scaleHeight);
+
+        // "RECREATE" THE NEW BITMAP
+        Bitmap resizedBitmap = Bitmap.createBitmap(
+                bm, 0, 0, width, height, matrix, false);
+        bm.recycle();
+        return resizedBitmap;
     }
 }
