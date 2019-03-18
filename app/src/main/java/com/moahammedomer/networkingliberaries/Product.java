@@ -4,7 +4,7 @@ public class Product {
 
     private String name, description, category, country;
     private double price;
-    private String server_images_url = "http://cb70b372.ngrok.io/imageUpload/";
+    private String server_images_url = "https://a1fc58bf.ngrok.io/imageUpload/";
 
     Product(int id, String name, double price, String description, String category, String country){
         this.id = id;

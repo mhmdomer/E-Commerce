@@ -6,28 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".ProductDetailActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/toolbar3"
-        android:minHeight="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/toolbar3_title"
-            android:textStyle="bold"
-            android:textSize="@dimen/toolbar_tite_size"
-            android:text="@string/detail_toolbar_title"
-            android:layout_gravity="center"/>
-    </android.support.v7.widget.Toolbar>
+    <include layout="@layout/toolbar"/>
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="260dp"
         android:src="@drawable/ic_add"
-        android:layout_below="@id/toolbar3"
+        android:layout_below="@id/toolbar"
         android:id="@+id/detail_image"
         android:layout_margin="8dp"/>
     <TextView

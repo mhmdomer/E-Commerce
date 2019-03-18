@@ -3,4 +3,19 @@
     <string name="SDG_unit">SDG</string>
     <string name="products_toolbar_title">Products</string>
     <string name="detail_toolbar_title">View Item</string>
+    <string name="my_info_nav">My Info</string>
+    <string name="about_the_app_nav">About The App</string>
+    <string name="contact_us_nav">Contact Us</string>
+    <string name="search">search</string>
+    <string name="share_and_rate">Share and rate</string>
+    <string name="share_app">Share App</string>
+    <string name="rate_app">Rate App</string>
+    <string name="home_nav">Home</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="view_item_title">View Item</string>
+    <string name="add_item_title">Add Item</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
 </resources>

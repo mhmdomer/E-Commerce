@@ -1,18 +1,17 @@
 package com.moahammedomer.networkingliberaries;
 
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -30,34 +29,36 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Main2Activity extends AppCompatActivity {
+public class MainFragment extends Fragment {
 
-    RecyclerView recyclerView;
-    MyRecyclerViewAdapter adapter;
+    public static RecyclerView recyclerView;
+    public static MyRecyclerViewAdapter adapter;
     public static ArrayList<Product> allProducts;
     ProgressBar progressBar;
     SearchView sv;
-    private String response_url = "http://cb70b372.ngrok.io/request_data.php";
+    private String response_url = "https://a1fc58bf.ngrok.io/request_data.php";
     public static final String NAME_EXTRA = "name";
     public static final String IMAGE_EXTRA = "image";
     public static final String DESCRIPTION_EXTRA = "description";
     public static final String PRICE_EXTRA = "price";
     public static final String COUNTRY_EXTRA = "country";
     public static final String CATEGORY_EXTRA = "category";
-    MyRecyclerViewAdapter.OnItemClickListener listener;
-    Toolbar toolbar;
+    public static MyRecyclerViewAdapter.OnItemClickListener listener;
+
+
+    public MainFragment() {
+        // Required empty public constructor
+    }
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        recyclerView = findViewById(R.id.recycler);
-        progressBar = findViewById(R.id.progress);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View fragment = inflater.inflate(R.layout.fragment_main, container, false);
+        recyclerView = fragment.findViewById(R.id.recycler);
+        progressBar = fragment.findViewById(R.id.progress);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                 layoutManager.getOrientation());
@@ -69,7 +70,7 @@ public class Main2Activity extends AppCompatActivity {
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         allProducts = new ArrayList<>();
         listener = (view, position) ->{
-            Intent intent = new Intent(Main2Activity.this, ProductDetailActivity.class);
+            Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
             Product product = allProducts.get(position);
             intent.putExtra(NAME_EXTRA, product.getName());
             intent.putExtra(PRICE_EXTRA, product.getPrice());
@@ -80,40 +81,11 @@ public class Main2Activity extends AppCompatActivity {
             startActivity(intent);
 
         };
-        adapter = new MyRecyclerViewAdapter(this, allProducts, listener);
+        adapter = new MyRecyclerViewAdapter(getActivity(), allProducts, listener);
         loadProductList();
+        return fragment;
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        loadProductList();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        MenuItem search = menu.findItem(R.id.search);
-        SearchView searchView=(SearchView)search.getActionView();
-        search(searchView);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.add:
-                Intent intent = new Intent(Main2Activity.this, MainActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.search:
-                //
-
-        }
-    return true;
-    }
 
     private void loadProductList(){
 
@@ -140,13 +112,13 @@ public class Main2Activity extends AppCompatActivity {
                             recyclerView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
-                            Toast.makeText(Main2Activity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(Main2Activity.this, error.getMessage() + "error accured", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), error.getMessage() + "error accured", Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -158,34 +130,6 @@ public class Main2Activity extends AppCompatActivity {
             }
         };
 
-        MySingleton.getInstance(Main2Activity.this).addToRequestQueue(request);
-    }
-
-    private void search(SearchView searchView) {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                getMatchProducts(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                getMatchProducts(newText);
-                return true;
-            }
-        });
-    }
-
-    public void getMatchProducts(String search){
-        ArrayList<Product> arrayList = new ArrayList<>();
-        int length = allProducts.size();
-        for(int i = 0; i < length; i++){
-            if(allProducts.get(i).getName().contains(search)){
-                arrayList.add(allProducts.get(i));
-            }
-        }
-        adapter = new MyRecyclerViewAdapter(this, arrayList, listener);
-        recyclerView.setAdapter(adapter);
+        MySingleton.getInstance(getActivity()).addToRequestQueue(request);
     }
 }
