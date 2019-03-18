@@ -7,6 +7,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,11 +34,10 @@ public class Main2Activity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     MyRecyclerViewAdapter adapter;
-    ArrayList<Product> allProducts;
+    public static ArrayList<Product> allProducts;
     ProgressBar progressBar;
     SearchView sv;
     private String response_url = "http://cb70b372.ngrok.io/request_data.php";
-    private String searchString;
     public static final String NAME_EXTRA = "name";
     public static final String IMAGE_EXTRA = "image";
     public static final String DESCRIPTION_EXTRA = "description";
@@ -45,12 +45,16 @@ public class Main2Activity extends AppCompatActivity {
     public static final String COUNTRY_EXTRA = "country";
     public static final String CATEGORY_EXTRA = "category";
     MyRecyclerViewAdapter.OnItemClickListener listener;
+    Toolbar toolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         recyclerView = findViewById(R.id.recycler);
         progressBar = findViewById(R.id.progress);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -77,7 +81,6 @@ public class Main2Activity extends AppCompatActivity {
 
         };
         adapter = new MyRecyclerViewAdapter(this, allProducts, listener);
-        searchString = "";
         loadProductList();
     }
 
@@ -178,12 +181,10 @@ public class Main2Activity extends AppCompatActivity {
         ArrayList<Product> arrayList = new ArrayList<>();
         int length = allProducts.size();
         for(int i = 0; i < length; i++){
-            Log.e("main", search + " : " + allProducts.get(i).getName() + " " + allProducts.get(i).getName().contains(search));
             if(allProducts.get(i).getName().contains(search)){
                 arrayList.add(allProducts.get(i));
             }
         }
-        Log.e("main", "arraylist size : " + arrayList.size());
         adapter = new MyRecyclerViewAdapter(this, arrayList, listener);
         recyclerView.setAdapter(adapter);
     }

@@ -7,13 +7,30 @@
     tools:context=".MainActivity">
 
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar2"
+        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar2_title"
+            android:textStyle="bold"
+            android:textSize="@dimen/toolbar_tite_size"
+            android:text="Add Item"
+            android:layout_gravity="center"/>
+    </android.support.v7.widget.Toolbar>
+
     <EditText
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
         android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
+        android:layout_below="@id/toolbar2"
         android:maxLines="1"
         android:hint="name"
         android:minWidth="300dp" />
