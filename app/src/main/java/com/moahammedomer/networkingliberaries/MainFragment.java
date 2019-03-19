@@ -24,6 +24,9 @@ public class MainFragment extends Fragment {
     public static ViewPager pager;
     public static ViewPagerAdapter adapter;
     public static AllFragment allFragment = null;
+    public static final String CAT1 = "Category1";
+    public static final String CAT2 = "Category2";
+    public static final String CAT3 = "Category3";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,8 +39,8 @@ public class MainFragment extends Fragment {
         // fixed a potential problem by passing getChildFragmentManager() , tab fragment where not
         // showing after renavigating to them
         adapter = new ViewPagerAdapter(getChildFragmentManager());
+        // don't created a new fragment if there is already exist one
         if (allFragment ==  null){
-            Log.e("main", "allFragment is null");
             allFragment = new AllFragment();
         }
         adapter.addFragment(allFragment, "All");

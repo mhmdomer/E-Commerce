@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,23 +11,23 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
 
-    public static final String SERVER_URL = "https://051218ca.ngrok.io/";
+    public static final String SERVER_URL = "https://f3d3b99b.ngrok.io/";
     Toolbar toolbar;
     private DrawerLayout drawer;
     MenuItem search;
     public static MainFragment mainFragment = null;
+    public static final String MAIN_FRAGMENT_TAG = "main tag";
+    NavigationView navigationView;
 
 
     @Override
@@ -43,15 +42,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         toggle.syncState();
+        // don't created a new fragment if there is already exist one
         if (mainFragment == null) {
-            Log.e("main", "mainFragment is null");
             mainFragment = new MainFragment();
         }
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.fragment_container, mainFragment).commit();
+        ft.add(R.id.fragment_container, mainFragment, MAIN_FRAGMENT_TAG).commit();
 
     }
 
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()){
             case R.id.main_page:
                 search.setVisible(true);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainFragment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainFragment(),MAIN_FRAGMENT_TAG).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
             case R.id.my_info:
@@ -91,8 +90,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
+        MainFragment f = (MainFragment) getSupportFragmentManager().findFragmentByTag(MAIN_FRAGMENT_TAG);
         if (drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
+        }
+        else if (!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof MainFragment)){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainFragment()).commit();
+            navigationView.getMenu().getItem(0).setChecked(true);
+            search.setVisible(true);
         }
         else {
             super.onBackPressed();
@@ -156,12 +161,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 arrayList.add(AllFragment.allProducts.get(i));
             }
         }
-        for (int i = 0; i < arrayList.size(); i++){
-            Log.e("main", arrayList.get(i).getName());
-        }
-        AllFragment.initListener(this, arrayList);
+        AllFragment.listener = AllFragment.initListener(this, arrayList);
         AllFragment.adapter = new MyRecyclerViewAdapter(this, arrayList, AllFragment.listener);
         AllFragment.recyclerView.setAdapter(AllFragment.adapter);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
 }

@@ -27,6 +27,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private ArrayList<Product> myList;
     private LayoutInflater mInflater;
     private OnItemClickListener listener;
+    Context context;
 
     public interface OnItemClickListener{
         void onItemClick(View view, int position);
@@ -36,6 +37,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         this.mInflater = LayoutInflater.from(context);
         this.myList = data;
         this.listener = listener;
+        this.context = context;
     }
     @NonNull
     @Override
@@ -50,7 +52,8 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         viewHolder.price.setText(String.valueOf(product.getPrice()) + " SDG");
         viewHolder.description.setText(product.getDescription());
         viewHolder.title.setText(product.getName());
-        Glide.with(viewHolder.itemView.getContext())
+        // this context.getApplicationContext fixed the crash after restarting the app after clicking the back button
+        Glide.with(context.getApplicationContext())
                 .load(product.getImageUrl())
 //                .override(200, 200)
                 .listener(new RequestListener<Drawable>() {
@@ -102,6 +105,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             mListener.onItemClick(v, getAdapterPosition());
         }
     }
+
 
 
 }

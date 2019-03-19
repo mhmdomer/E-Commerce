@@ -69,15 +69,14 @@ public class AllFragment extends Fragment {
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         allProducts = new ArrayList<>();
-        initListener(getActivity(),allProducts);
+        listener = initListener(getActivity(),allProducts);
         adapter = new MyRecyclerViewAdapter(getActivity(), allProducts, listener);
-        Log.e("main", "loading all fragment..");
         loadProductList();
         return fragment;
     }
 
-    public static void initListener(Context context, ArrayList<Product> list){
-        listener = listener = (view, position) ->{
+    public static MyRecyclerViewAdapter.OnItemClickListener  initListener(Context context, ArrayList<Product> list){
+        MyRecyclerViewAdapter.OnItemClickListener mlistener  = (view, position) ->{
             Intent intent = new Intent(context, ProductDetailActivity.class);
             Product product = list.get(position);
             intent.putExtra(NAME_EXTRA, product.getName());
@@ -89,6 +88,7 @@ public class AllFragment extends Fragment {
             context.startActivity(intent);
 
         };
+        return mlistener;
     }
 
     public void loadProductList(){
@@ -98,7 +98,6 @@ public class AllFragment extends Fragment {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.e("mian", response);
                         try {
                             JSONArray array = new JSONArray(response);
                             allProducts.clear();
@@ -115,6 +114,40 @@ public class AllFragment extends Fragment {
                             recyclerView.setVisibility(View.VISIBLE);
                             recyclerView.setAdapter(adapter);
                             adapter.notifyDataSetChanged();
+                            ArrayList<Product> firstCategoryList = new ArrayList<Product>();
+                            ArrayList<Product> secondCategoryList = new ArrayList<Product>();
+                            ArrayList<Product> thirdCategoryList = new ArrayList<Product>();
+                            for (int i = 0; i < allProducts.size(); i++){
+                                switch (allProducts.get(i).getCategory()){
+                                    case MainFragment.CAT1:
+                                        firstCategoryList.add(allProducts.get(i));
+                                        break;
+                                    case MainFragment.CAT2:
+                                        secondCategoryList.add(allProducts.get(i));
+                                        break;
+                                    case MainFragment.CAT3:
+                                        thirdCategoryList.add(allProducts.get(i));
+                                        break;
+                                }
+                            }
+                            MyRecyclerViewAdapter firstCategoryAdapter = new MyRecyclerViewAdapter(getActivity(),
+                                    firstCategoryList,
+                                    initListener(getActivity(), firstCategoryList));
+                            MyRecyclerViewAdapter secondCategoryAdapter = new MyRecyclerViewAdapter(getActivity(),
+                                    secondCategoryList,
+                                    initListener(getActivity(), secondCategoryList));
+                            MyRecyclerViewAdapter thirdCategoryAdapter = new MyRecyclerViewAdapter(getActivity(),
+                                    thirdCategoryList,
+                                    initListener(getActivity(), thirdCategoryList));
+                            Category1Fragment.progressBar.setVisibility(View.GONE);
+                            Category2Fragment.progressBar.setVisibility(View.GONE);
+                            Category3Fragment.progressBar.setVisibility(View.GONE);
+                            Category1Fragment.recyclerView.setVisibility(View.VISIBLE);
+                            Category2Fragment.recyclerView.setVisibility(View.VISIBLE);
+                            Category3Fragment.recyclerView.setVisibility(View.VISIBLE);
+                            Category1Fragment.recyclerView.setAdapter(firstCategoryAdapter);
+                            Category2Fragment.recyclerView.setAdapter(secondCategoryAdapter);
+                            Category3Fragment.recyclerView.setAdapter(thirdCategoryAdapter);
                         } catch (JSONException e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
