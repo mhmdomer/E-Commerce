@@ -37,11 +37,11 @@ public class ProductDetailActivity extends AppCompatActivity {
         category = findViewById(R.id.detial_category);
         image = findViewById(R.id.detail_image);
         order = findViewById(R.id.detail_order);
-        description.setText(intent.getExtras().getString(MainFragment.DESCRIPTION_EXTRA));
-        country.setText(intent.getExtras().getString(MainFragment.COUNTRY_EXTRA));
-        category.setText(intent.getExtras().getString(MainFragment.CATEGORY_EXTRA));
+        description.setText(intent.getExtras().getString(AllFragment.DESCRIPTION_EXTRA));
+        country.setText(intent.getExtras().getString(AllFragment.COUNTRY_EXTRA));
+        category.setText(intent.getExtras().getString(AllFragment.CATEGORY_EXTRA));
         Glide.with(this)
-                .load(intent.getExtras().getString(MainFragment.IMAGE_EXTRA))
+                .load(intent.getExtras().getString(AllFragment.IMAGE_EXTRA))
                 .into(image);
         image.setClickable(true);
         image.setOnClickListener(new View.OnClickListener() {
@@ -51,7 +51,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 d.setContentView(R.layout.image_layout);
                 ImageView imageView = d.findViewById(R.id.image_preview);
                 Glide.with(ProductDetailActivity.this)
-                        .load(intent.getExtras().getString(MainFragment.IMAGE_EXTRA))
+                        .load(intent.getExtras().getString(AllFragment.IMAGE_EXTRA))
                         .into(imageView);
                 d.show();
             }

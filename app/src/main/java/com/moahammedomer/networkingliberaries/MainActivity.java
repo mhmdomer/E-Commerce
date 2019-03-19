@@ -2,6 +2,8 @@ package com.moahammedomer.networkingliberaries;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
@@ -16,11 +18,12 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
 
     Toolbar toolbar;
     private DrawerLayout drawer;
+    MenuItem search;
 
 
     @Override
@@ -35,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         toggle.syncState();
 
         if (savedInstanceState == null) {
@@ -44,6 +49,39 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.main_page:
+                search.setVisible(true);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainFragment()).commit();
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            case R.id.my_info:
+                search.setVisible(false);
+                //TODO launch users info fragment
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            case R.id.about:
+                search.setVisible(false);
+                //TODO launch about fragment
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            case R.id.contact_us:
+                search.setVisible(false);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ContactUsFragment()).commit();
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            case R.id.share_app:
+                //TODO fire share app intent
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
+            case R.id.rate_app:
+                //TODO fire rate app intent
+                drawer.closeDrawer(GravityCompat.START);
+        }
+        return true;
+    }
 
     @Override
     public void onBackPressed() {
@@ -65,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        MenuItem search = menu.findItem(R.id.search);
+        search = menu.findItem(R.id.search);
         SearchView searchView=(SearchView)search.getActionView();
         search(searchView);
         return true;
@@ -79,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
                 return true;
             case R.id.search:
-                //
+                MainFragment.tab.getTabAt(1).select();
 
         }
         return true;
@@ -103,13 +141,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void getMatchProducts(String search){
         ArrayList<Product> arrayList = new ArrayList<>();
-        int length = MainFragment.allProducts.size();
+        int length = AllFragment.allProducts.size();
         for(int i = 0; i < length; i++){
-            if(MainFragment.allProducts.get(i).getName().contains(search)){
-                arrayList.add(MainFragment.allProducts.get(i));
+            if(AllFragment.allProducts.get(i).getName().contains(search)){
+                arrayList.add(AllFragment.allProducts.get(i));
             }
         }
-        MainFragment.adapter = new MyRecyclerViewAdapter(this, arrayList, MainFragment.listener);
-        MainFragment.recyclerView.setAdapter(MainFragment.adapter);
+        AllFragment.adapter = new MyRecyclerViewAdapter(this, arrayList, AllFragment.listener);
+        AllFragment.recyclerView.setAdapter(AllFragment.adapter);
     }
+
 }

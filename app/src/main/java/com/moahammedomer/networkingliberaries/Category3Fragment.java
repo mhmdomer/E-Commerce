@@ -6,15 +6,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 
-public class ContactUsFragment extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class Category3Fragment extends Fragment {
 
 
-    public ContactUsFragment() {
+    public Category3Fragment() {
         // Required empty public constructor
     }
 
@@ -23,10 +23,7 @@ public class ContactUsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View fragment =  inflater.inflate(R.layout.fragment_contact_us, container, false);
-        TextView title = getActivity().findViewById(R.id.toolbar_title);
-        title.setText(R.string.contact_us_title);
-        return fragment;
+        return inflater.inflate(R.layout.fragment_category3, container, false);
     }
 
 }

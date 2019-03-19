@@ -47,7 +47,7 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public void onBindViewHolder(@NonNull MyRecyclerViewAdapter.ViewHolder viewHolder, int i) {
         Product product = myList.get(i);
-        viewHolder.price.setText(String.valueOf(product.getPrice()) + R.string.SDG_unit);
+        viewHolder.price.setText(String.valueOf(product.getPrice()) + " SDG");
         viewHolder.description.setText(product.getDescription());
         viewHolder.title.setText(product.getName());
         Glide.with(viewHolder.itemView.getContext())
