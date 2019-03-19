@@ -23,6 +23,7 @@ public class MainFragment extends Fragment {
     public static TabLayout tab;
     public static ViewPager pager;
     public static ViewPagerAdapter adapter;
+    public static AllFragment allFragment = null;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -30,11 +31,16 @@ public class MainFragment extends Fragment {
         View fragment =  inflater.inflate(R.layout.fragment_main, container, false);
         TextView title = getActivity().findViewById(R.id.toolbar_title);
         title.setText(R.string.products_toolbar_title);
-        Log.e("main", "main fragment starting..");
         pager = fragment.findViewById(R.id.pager);
         pager.setOffscreenPageLimit(4);
-        adapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-        adapter.addFragment(new AllFragment(), "All");
+        // fixed a potential problem by passing getChildFragmentManager() , tab fragment where not
+        // showing after renavigating to them
+        adapter = new ViewPagerAdapter(getChildFragmentManager());
+        if (allFragment ==  null){
+            Log.e("main", "allFragment is null");
+            allFragment = new AllFragment();
+        }
+        adapter.addFragment(allFragment, "All");
         adapter.addFragment(new Category1Fragment(), "Category1");
         adapter.addFragment(new Category2Fragment(), "Category2");
         adapter.addFragment(new Category3Fragment(), "Category3");

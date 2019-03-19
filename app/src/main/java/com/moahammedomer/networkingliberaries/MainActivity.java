@@ -12,18 +12,23 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
 
+    public static final String SERVER_URL = "https://051218ca.ngrok.io/";
     Toolbar toolbar;
     private DrawerLayout drawer;
     MenuItem search;
+    public static MainFragment mainFragment = null;
 
 
     @Override
@@ -41,12 +46,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         toggle.syncState();
-
-        if (savedInstanceState == null) {
-            Fragment newFragment = new MainFragment();
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.add(R.id.fragment_container, newFragment).commit();
+        if (mainFragment == null) {
+            Log.e("main", "mainFragment is null");
+            mainFragment = new MainFragment();
         }
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(R.id.fragment_container, mainFragment).commit();
+
     }
 
     @Override
@@ -103,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        search = menu.findItem(R.id.search);
+        search = menu.findItem(R.id.search_products);
         SearchView searchView=(SearchView)search.getActionView();
         search(searchView);
         return true;
@@ -116,14 +122,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.search:
-                MainFragment.tab.getTabAt(1).select();
-
         }
         return true;
     }
 
     private void search(SearchView searchView) {
+        searchView.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainFragment.tab.getTabAt(0).select();
+            }
+        });
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -147,6 +156,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 arrayList.add(AllFragment.allProducts.get(i));
             }
         }
+        for (int i = 0; i < arrayList.size(); i++){
+            Log.e("main", arrayList.get(i).getName());
+        }
+        AllFragment.initListener(this, arrayList);
         AllFragment.adapter = new MyRecyclerViewAdapter(this, arrayList, AllFragment.listener);
         AllFragment.recyclerView.setAdapter(AllFragment.adapter);
     }

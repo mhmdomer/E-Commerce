@@ -9,7 +9,7 @@
         android:icon="@drawable/ic_add"
         />
     <item
-        android:id="@+id/search"
+        android:id="@+id/search_products"
         android:title="@string/search"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_search"

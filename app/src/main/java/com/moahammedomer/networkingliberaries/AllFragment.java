@@ -1,6 +1,7 @@
 package com.moahammedomer.networkingliberaries;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -37,7 +38,7 @@ public class AllFragment extends Fragment {
     public static ArrayList<Product> allProducts;
     ProgressBar progressBar;
     SearchView sv;
-    private String response_url = "https://a1fc58bf.ngrok.io/request_data.php";
+    private String response_url = MainActivity.SERVER_URL + "request_data.php";
     public static final String NAME_EXTRA = "name";
     public static final String IMAGE_EXTRA = "image";
     public static final String DESCRIPTION_EXTRA = "description";
@@ -45,25 +46,18 @@ public class AllFragment extends Fragment {
     public static final String COUNTRY_EXTRA = "country";
     public static final String CATEGORY_EXTRA = "category";
     public static MyRecyclerViewAdapter.OnItemClickListener listener;
+    View fragment;
 
-
-    public AllFragment() {
-        // Required empty public constructor
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View fragment = inflater.inflate(R.layout.fragment_all, container, false);
+        if(fragment == null){
+            fragment = inflater.inflate(R.layout.fragment_all, container, false);
+        }
         recyclerView = fragment.findViewById(R.id.recycler);
         progressBar = fragment.findViewById(R.id.progress);
-        Log.e("main", "loading all");
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
@@ -75,25 +69,29 @@ public class AllFragment extends Fragment {
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
         allProducts = new ArrayList<>();
-        listener = (view, position) ->{
-            Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
-            Product product = allProducts.get(position);
+        initListener(getActivity(),allProducts);
+        adapter = new MyRecyclerViewAdapter(getActivity(), allProducts, listener);
+        Log.e("main", "loading all fragment..");
+        loadProductList();
+        return fragment;
+    }
+
+    public static void initListener(Context context, ArrayList<Product> list){
+        listener = listener = (view, position) ->{
+            Intent intent = new Intent(context, ProductDetailActivity.class);
+            Product product = list.get(position);
             intent.putExtra(NAME_EXTRA, product.getName());
             intent.putExtra(PRICE_EXTRA, product.getPrice());
             intent.putExtra(DESCRIPTION_EXTRA, product.getDescription());
             intent.putExtra(COUNTRY_EXTRA, product.getCountry());
             intent.putExtra(CATEGORY_EXTRA, product.getCategory());
             intent.putExtra(IMAGE_EXTRA, product.getImageUrl());
-            startActivity(intent);
+            context.startActivity(intent);
 
         };
-        adapter = new MyRecyclerViewAdapter(getActivity(), allProducts, listener);
-        loadProductList();
-        return fragment;
     }
 
-
-    private void loadProductList(){
+    public void loadProductList(){
 
         Log.e("main", "requesting");
         StringRequest request = new StringRequest(Request.Method.POST, response_url,
