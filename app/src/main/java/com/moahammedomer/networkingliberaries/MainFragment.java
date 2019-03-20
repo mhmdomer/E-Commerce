@@ -43,10 +43,10 @@ public class MainFragment extends Fragment {
         if (allFragment ==  null){
             allFragment = new AllFragment();
         }
-        adapter.addFragment(allFragment, "All");
-        adapter.addFragment(new Category1Fragment(), "Category1");
-        adapter.addFragment(new Category2Fragment(), "Category2");
-        adapter.addFragment(new Category3Fragment(), "Category3");
+        adapter.addFragment(allFragment, getString(R.string.all_categories_title));
+        adapter.addFragment(new Category1Fragment(), getString(R.string.category1_title));
+        adapter.addFragment(new Category2Fragment(), getString(R.string.category2_title));
+        adapter.addFragment(new Category3Fragment(), getString(R.string.category3_title));
         pager.setAdapter(adapter);
 
         tab = fragment.findViewById(R.id.tab_layout);

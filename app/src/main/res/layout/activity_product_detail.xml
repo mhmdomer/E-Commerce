@@ -31,14 +31,14 @@
         android:id="@+id/detail_country"
         android:layout_below="@id/detail_price"
         android:layout_marginBottom="10dp"
-        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
         android:text="Sudan"
         android:layout_alignParentStart="true"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/detial_category"
-        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
         android:layout_below="@id/detail_country"
         android:layout_marginBottom="10dp"
         android:text="Medical"/>
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/detial_category"
-        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
         android:layout_marginBottom="8dp"
         android:text="Description:"
         android:textStyle="bold" />
@@ -57,7 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/detail_order"
-        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
         android:layout_below="@id/detail_description_label">
 
         <TextView

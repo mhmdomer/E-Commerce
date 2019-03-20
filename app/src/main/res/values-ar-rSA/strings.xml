@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">E-Commerce</string>
+    <string name="SDG_unit">جنيه</string>
+    <string name="products_toolbar_title">المنتجات</string>
+    <string name="detail_toolbar_title">معاينة المنتج</string>
+    <string name="my_info_nav">معلومات حسابي</string>
+    <string name="about_the_app_nav">عن التطبيق</string>
+    <string name="contact_us_nav">تواصل معنا</string>
+    <string name="search">ابحث</string>
+    <string name="share_and_rate">شارك و قيم</string>
+    <string name="share_app">شارك التطبيق</string>
+    <string name="rate_app">قيم التطبيق</string>
+    <string name="home_nav">الرئيسية</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">مرحبا 2</string>
+    <string name="view_item_title">معاينة المنتج</string>
+    <string name="add_item_title">أضف منتج</string>
+    <string name="navigation_drawer_close">اقفل المتنقل</string>
+    <string name="navigation_drawer_open">افتح المتنقل</string>
+    <string name="contact_us_title">تواصل معنا</string>
+    <string name="category1_title">النوع1</string>
+    <string name="category2_title">النوع2</string>
+    <string name="category3_title">النوع3</string>
+    <string name="all_categories_title">الكل</string>
+    <string name="add_itme">إضافة</string>
+    <string name="search_hint">بحث..</string>
+</resources>

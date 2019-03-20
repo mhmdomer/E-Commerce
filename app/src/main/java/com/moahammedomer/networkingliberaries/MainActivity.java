@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
 
-    public static final String SERVER_URL = "https://f3d3b99b.ngrok.io/";
+    public static final String SERVER_URL = "https://40a15d26.ngrok.io/";
     Toolbar toolbar;
     private DrawerLayout drawer;
     MenuItem search;
@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         inflater.inflate(R.menu.main_menu, menu);
         search = menu.findItem(R.id.search_products);
         SearchView searchView=(SearchView)search.getActionView();
+        searchView.setQueryHint(getString(R.string.search_hint));
         search(searchView);
         return true;
     }
