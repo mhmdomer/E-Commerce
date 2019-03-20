@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
 
+    public static boolean firstStart = true;
     public static final String SERVER_URL = "https://40a15d26.ngrok.io/";
     Toolbar toolbar;
     private DrawerLayout drawer;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static MainFragment mainFragment = null;
     public static final String MAIN_FRAGMENT_TAG = "main tag";
     NavigationView navigationView;
+    SearchView searchView;
 
 
     @Override
@@ -61,36 +63,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 search.setVisible(true);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainFragment(),MAIN_FRAGMENT_TAG).commit();
                 drawer.closeDrawer(GravityCompat.START);
+                searchView.clearFocus();
                 return true;
             case R.id.my_info:
                 search.setVisible(false);
                 //TODO launch users info fragment
                 drawer.closeDrawer(GravityCompat.START);
+                searchView.clearFocus();
                 return true;
             case R.id.about:
                 search.setVisible(false);
                 //TODO launch about fragment
                 drawer.closeDrawer(GravityCompat.START);
+                searchView.clearFocus();
                 return true;
             case R.id.contact_us:
                 search.setVisible(false);
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ContactUsFragment()).commit();
                 drawer.closeDrawer(GravityCompat.START);
+                searchView.clearFocus();
                 return true;
             case R.id.share_app:
                 //TODO fire share app intent
                 drawer.closeDrawer(GravityCompat.START);
+                searchView.clearFocus();
                 return true;
             case R.id.rate_app:
                 //TODO fire rate app intent
                 drawer.closeDrawer(GravityCompat.START);
+                searchView.clearFocus();
         }
         return true;
     }
 
     @Override
     public void onBackPressed() {
-        MainFragment f = (MainFragment) getSupportFragmentManager().findFragmentByTag(MAIN_FRAGMENT_TAG);
         if (drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
         }
@@ -115,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
         search = menu.findItem(R.id.search_products);
-        SearchView searchView=(SearchView)search.getActionView();
+        searchView=(SearchView)search.getActionView();
         searchView.setQueryHint(getString(R.string.search_hint));
         search(searchView);
         return true;
@@ -142,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                getMatchProducts(query);
+                searchView.clearFocus();
                 return true;
             }
 

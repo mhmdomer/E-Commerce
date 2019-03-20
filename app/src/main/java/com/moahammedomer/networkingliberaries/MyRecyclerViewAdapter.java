@@ -28,14 +28,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private LayoutInflater mInflater;
     private OnItemClickListener listener;
     Context context;
-    int lastPosition = -1;
+    int lastPosition = 4;
 
     public interface OnItemClickListener{
         void onItemClick(View view, int position);
     }
 
     MyRecyclerViewAdapter(Context context, ArrayList<Product> data, OnItemClickListener listener){
-        this.mInflater = LayoutInflater.from(context);
+        this.mInflater = LayoutInflater.from(context.getApplicationContext());
         this.myList = data;
         this.listener = listener;
         this.context = context;

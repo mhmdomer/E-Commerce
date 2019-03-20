@@ -28,6 +28,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         title = findViewById(R.id.toolbar_title);
         title.setText(R.string.view_item_title);
         Intent intent = getIntent();
@@ -58,4 +60,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         });
 
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        startActivity(new Intent(this, MainActivity.class));
+//    }
 }

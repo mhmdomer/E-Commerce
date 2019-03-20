@@ -132,24 +132,26 @@ public class AllFragment extends Fragment {
                                         break;
                                 }
                             }
-                            MyRecyclerViewAdapter firstCategoryAdapter = new MyRecyclerViewAdapter(getActivity(),
-                                    firstCategoryList,
-                                    initListener(getActivity(), firstCategoryList));
-                            MyRecyclerViewAdapter secondCategoryAdapter = new MyRecyclerViewAdapter(getActivity(),
-                                    secondCategoryList,
-                                    initListener(getActivity(), secondCategoryList));
-                            MyRecyclerViewAdapter thirdCategoryAdapter = new MyRecyclerViewAdapter(getActivity(),
-                                    thirdCategoryList,
-                                    initListener(getActivity(), thirdCategoryList));
-                            Category1Fragment.progressBar.setVisibility(View.GONE);
-                            Category2Fragment.progressBar.setVisibility(View.GONE);
-                            Category3Fragment.progressBar.setVisibility(View.GONE);
-                            Category1Fragment.recyclerView.setVisibility(View.VISIBLE);
-                            Category2Fragment.recyclerView.setVisibility(View.VISIBLE);
-                            Category3Fragment.recyclerView.setVisibility(View.VISIBLE);
-                            Category1Fragment.recyclerView.setAdapter(firstCategoryAdapter);
-                            Category2Fragment.recyclerView.setAdapter(secondCategoryAdapter);
-                            Category3Fragment.recyclerView.setAdapter(thirdCategoryAdapter);
+                            if (getActivity() != null){
+                                MyRecyclerViewAdapter firstCategoryAdapter = new MyRecyclerViewAdapter(getActivity().getApplicationContext(),
+                                        firstCategoryList,
+                                        initListener(getActivity().getApplicationContext(), firstCategoryList));
+                                MyRecyclerViewAdapter secondCategoryAdapter = new MyRecyclerViewAdapter(getActivity().getApplicationContext(),
+                                        secondCategoryList,
+                                        initListener(getActivity().getApplicationContext(), secondCategoryList));
+                                MyRecyclerViewAdapter thirdCategoryAdapter = new MyRecyclerViewAdapter(getActivity().getApplicationContext(),
+                                        thirdCategoryList,
+                                        initListener(getActivity().getApplicationContext(), thirdCategoryList));
+                                Category1Fragment.progressBar.setVisibility(View.GONE);
+                                Category2Fragment.progressBar.setVisibility(View.GONE);
+                                Category3Fragment.progressBar.setVisibility(View.GONE);
+                                Category1Fragment.recyclerView.setVisibility(View.VISIBLE);
+                                Category2Fragment.recyclerView.setVisibility(View.VISIBLE);
+                                Category3Fragment.recyclerView.setVisibility(View.VISIBLE);
+                                Category1Fragment.recyclerView.setAdapter(firstCategoryAdapter);
+                                Category2Fragment.recyclerView.setAdapter(secondCategoryAdapter);
+                                Category3Fragment.recyclerView.setAdapter(thirdCategoryAdapter);
+                            }
                         } catch (JSONException e) {
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }

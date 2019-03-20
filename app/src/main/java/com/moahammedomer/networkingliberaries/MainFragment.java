@@ -17,7 +17,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends Fragment implements TabLayout.OnTabSelectedListener{
 
 
     public static TabLayout tab;
@@ -35,6 +35,7 @@ public class MainFragment extends Fragment {
         TextView title = getActivity().findViewById(R.id.toolbar_title);
         title.setText(R.string.products_toolbar_title);
         pager = fragment.findViewById(R.id.pager);
+        // to load all tab fragments without navigating to them
         pager.setOffscreenPageLimit(4);
         // fixed a potential problem by passing getChildFragmentManager() , tab fragment where not
         // showing after renavigating to them
@@ -53,6 +54,21 @@ public class MainFragment extends Fragment {
         tab.setTabMode(TabLayout.MODE_SCROLLABLE);
         tab.setupWithViewPager(pager);
         return fragment;
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+        //TODO go to the top of the current fragment
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter{
