@@ -37,7 +37,7 @@ public class AddItemActivity extends AppCompatActivity {
     ProgressBar progressBar;
     Button b, select;
     EditText name;
-    private String response_url = MainActivity.SERVER_URL + "/test.php";
+    private String response_url = MainActivity.SERVER_URL + "/upload_product.php";
     ImageView imageView;
     final static int IMAGE_REQUEST = 100;
     Uri imageUri;

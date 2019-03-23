@@ -24,6 +24,9 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
     public static ViewPager pager;
     public static ViewPagerAdapter adapter;
     public static AllFragment allFragment = null;
+    public static Category1Fragment category1Fragment = null;
+    public static Category2Fragment category2Fragment = null;
+    public static Category3Fragment category3Fragment = null;
     public static final String CAT1 = "Category1";
     public static final String CAT2 = "Category2";
     public static final String CAT3 = "Category3";
@@ -43,11 +46,14 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
         // don't created a new fragment if there is already exist one
         if (allFragment ==  null){
             allFragment = new AllFragment();
+            category1Fragment = new Category1Fragment();
+            category2Fragment = new Category2Fragment();
+            category3Fragment = new Category3Fragment();
         }
         adapter.addFragment(allFragment, getString(R.string.all_categories_title));
-        adapter.addFragment(new Category1Fragment(), getString(R.string.category1_title));
-        adapter.addFragment(new Category2Fragment(), getString(R.string.category2_title));
-        adapter.addFragment(new Category3Fragment(), getString(R.string.category3_title));
+        adapter.addFragment(category1Fragment, getString(R.string.category1_title));
+        adapter.addFragment(category2Fragment, getString(R.string.category2_title));
+        adapter.addFragment(category3Fragment, getString(R.string.category3_title));
         pager.setAdapter(adapter);
 
         tab = fragment.findViewById(R.id.tab_layout);

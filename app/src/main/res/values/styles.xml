@@ -10,7 +10,10 @@
         <item name="windowNoTitle">true</item>
         <item name="actionOverflowButtonStyle">@style/MyOverflowButtonStyle</item>
         <item name="drawerArrowStyle">@style/WhiteDrawerIconStyle</item>
+    </style>
 
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/background_launcher</item>
     </style>
 
     <style name="MyOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">

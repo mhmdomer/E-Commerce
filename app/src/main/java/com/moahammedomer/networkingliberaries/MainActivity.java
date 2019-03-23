@@ -1,6 +1,8 @@
 package com.moahammedomer.networkingliberaries;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     public static boolean firstStart = true;
-    public static final String SERVER_URL = "https://40a15d26.ngrok.io/";
+    public static final String SERVER_URL = "http://mohammedomerali.000webhostapp.com/";
     Toolbar toolbar;
     private DrawerLayout drawer;
     MenuItem search;

@@ -54,26 +54,26 @@ public class AllFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        if(fragment == null){
+        if(fragment == null) {
             fragment = inflater.inflate(R.layout.fragment_all, container, false);
+            recyclerView = fragment.findViewById(R.id.recycler);
+            progressBar = fragment.findViewById(R.id.progress);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+            recyclerView.setLayoutManager(layoutManager);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                    layoutManager.getOrientation());
+            dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.list_devider));
+            recyclerView.addItemDecoration(dividerItemDecoration);
+            // for caching images
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setItemViewCacheSize(20);
+            recyclerView.setDrawingCacheEnabled(true);
+            recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+            allProducts = new ArrayList<>();
+            listener = initListener(getActivity(), allProducts);
+            adapter = new MyRecyclerViewAdapter(getActivity(), allProducts, listener);
+            loadProductList();
         }
-        recyclerView = fragment.findViewById(R.id.recycler);
-        progressBar = fragment.findViewById(R.id.progress);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                layoutManager.getOrientation());
-        dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.list_devider));
-        recyclerView.addItemDecoration(dividerItemDecoration);
-        // for caching images
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setItemViewCacheSize(20);
-        recyclerView.setDrawingCacheEnabled(true);
-        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-        allProducts = new ArrayList<>();
-        listener = initListener(getActivity(),allProducts);
-        adapter = new MyRecyclerViewAdapter(getActivity(), allProducts, listener);
-        loadProductList();
         return fragment;
     }
 
