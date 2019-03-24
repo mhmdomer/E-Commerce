@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ContactUsFragment">
-    
+    tools:context=".AboutTheAppFragment">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Our contact info here"
-        android:layout_centerInParent="true" />
+        android:layout_centerInParent="true"
+        android:text="About the app info here" />
 
 </RelativeLayout>

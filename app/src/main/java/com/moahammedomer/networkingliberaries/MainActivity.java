@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -69,13 +70,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 return true;
             case R.id.my_info:
                 search.setVisible(false);
-                //TODO launch users info fragment
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MyInfoFragment(),MAIN_FRAGMENT_TAG).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 searchView.clearFocus();
                 return true;
             case R.id.about:
                 search.setVisible(false);
-                //TODO launch about fragment
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AboutTheAppFragment(),MAIN_FRAGMENT_TAG).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 searchView.clearFocus();
                 return true;
@@ -86,12 +87,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 searchView.clearFocus();
                 return true;
             case R.id.share_app:
-                //TODO fire share app intent
+                Toast.makeText(this, "start share app intent", Toast.LENGTH_SHORT).show();
                 drawer.closeDrawer(GravityCompat.START);
                 searchView.clearFocus();
                 return true;
             case R.id.rate_app:
-                //TODO fire rate app intent
+                Toast.makeText(this, "start rate app intent", Toast.LENGTH_SHORT).show();
                 drawer.closeDrawer(GravityCompat.START);
                 searchView.clearFocus();
         }

@@ -153,20 +153,19 @@ public class AllFragment extends Fragment {
                                 Category3Fragment.recyclerView.setAdapter(thirdCategoryAdapter);
                             }
                         } catch (JSONException e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Toast.makeText(getContext().getApplicationContext(), error.getMessage() + "error accured", Toast.LENGTH_SHORT).show();
+                // TODO pop up a dialog to check internet connection and try again
             }
         }){
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> map = new HashMap<>();
-//                Log.e("main", "search string " + searchString);
-//                map.put("search", searchString);
                 return map;
             }
         };

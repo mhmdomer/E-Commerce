@@ -8,24 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+
+public class AboutTheAppFragment extends Fragment {
 
 
-public class ContactUsFragment extends Fragment {
-
-
-    public ContactUsFragment() {
-        // Required empty public constructor
-    }
-
+    View fragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View fragment =  inflater.inflate(R.layout.fragment_contact_us, container, false);
+        fragment = inflater.inflate(R.layout.fragment_about_the_app, container, false);
         TextView title = getActivity().findViewById(R.id.toolbar_title);
-        title.setText(R.string.contact_us_nav);
+        title.setText(R.string.about_the_app_nav);
         return fragment;
     }
 
