@@ -14,10 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
                 R.string.navigation_drawer_open,
@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawer.closeDrawer(GravityCompat.START);
                 mainFragment.loadProductList();
                 navigationView.getMenu().getItem(0).setChecked(true);
+                search.setVisible(true);
                 return true;
 
             case R.id.share_app:
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void search(SearchView searchView) {
-        searchView.setOnSearchClickListener(v -> mainFragment.tab.getTabAt(0).select());
+        searchView.setOnSearchClickListener(v -> Objects.requireNonNull(mainFragment.tab.getTabAt(0)).select());
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

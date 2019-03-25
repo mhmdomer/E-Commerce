@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class MainFragment extends Fragment implements TabLayout.OnTabSelectedListener{
 
@@ -62,7 +63,7 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
         if (fragment == null){
             fragment =  inflater.inflate(R.layout.fragment_main, container, false);
         }
-        TextView title = getActivity().findViewById(R.id.toolbar_title);
+        TextView title = Objects.requireNonNull(getActivity()).findViewById(R.id.toolbar_title);
         title.setText(R.string.products_toolbar_title);
         pager = fragment.findViewById(R.id.pager);
         // to load all tab fragments without navigating to them
@@ -117,7 +118,7 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
         private List<String> titleList = new ArrayList<>();
         private List<Fragment> fragmentList = new ArrayList<>();
 
-        public ViewPagerAdapter(FragmentManager fm) {
+        ViewPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -131,7 +132,7 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
             return fragmentList.size();
         }
 
-        public void addFragment(Fragment fragment, String title){
+        void addFragment(Fragment fragment, String title){
             fragmentList.add(fragment);
             titleList.add(title);
         }

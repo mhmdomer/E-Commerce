@@ -9,7 +9,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,6 +16,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
+
+import java.util.Objects;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
@@ -41,7 +42,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             width = findViewById(R.id.detail_container).getWidth();
         }
         context = this;
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         title = findViewById(R.id.toolbar_title);
@@ -60,19 +61,16 @@ public class ProductDetailActivity extends AppCompatActivity {
                 .load(intent.getExtras().getString(MainFragment.IMAGE_EXTRA))
                 .into(image);
         image.setClickable(true);
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (image.getDrawable() != null) {
-                    bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
-                    final Dialog nagDialog = new Dialog(context, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-                    nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    nagDialog.setCancelable(true);
-                    nagDialog.setContentView(R.layout.image_layout);
-                    PhotoView view = nagDialog.findViewById(R.id.image_preview);
-                    view.setImageBitmap(bitmap);
-                    nagDialog.show();
-                }
+        image.setOnClickListener(v -> {
+            if (image.getDrawable() != null) {
+                bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+                final Dialog nagDialog = new Dialog(context, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+                nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                nagDialog.setCancelable(true);
+                nagDialog.setContentView(R.layout.image_layout);
+                PhotoView view = nagDialog.findViewById(R.id.image_preview);
+                view.setImageBitmap(bitmap);
+                nagDialog.show();
             }
         });
 

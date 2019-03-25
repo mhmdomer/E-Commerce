@@ -31,6 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class AddItemActivity extends AppCompatActivity {
 
@@ -51,7 +52,7 @@ public class AddItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_item);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
         title = findViewById(R.id.toolbar_title);
         title.setText(R.string.add_item_title);
         b = findViewById(R.id.button);
@@ -59,41 +60,30 @@ public class AddItemActivity extends AppCompatActivity {
         name = findViewById(R.id.name);
         imageView = findViewById(R.id.img);
         progressBar = new ProgressBar(this, null, android.R.attr.progressBarStyleSmall);
-        select.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        select.setOnClickListener( v -> {
                 Intent intent = new Intent();
                 intent.setType("image/*");
                 intent.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), IMAGE_REQUEST);
-            }
         });
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        b.setOnClickListener( v ->{
                 if(imageView.getDrawable() == null || name.getText().toString().isEmpty()){
                     Toast.makeText(AddItemActivity.this, "Please select an Image and a name", Toast.LENGTH_SHORT).show();
                 }
                 else{
                     StringRequest request = new StringRequest(Request.Method.POST, response_url,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
+                            response ->{
 
                                     Toast.makeText(AddItemActivity.this, response, Toast.LENGTH_LONG).show();
                                     name.setText("");
                                     imageView.setImageBitmap(null);
                                     startActivity(new Intent(AddItemActivity.this, MainActivity.class));
 
-                                }
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
+                            }, error ->{
                             Toast.makeText(AddItemActivity.this, "Something went wrong!", Toast.LENGTH_LONG).show();
-                        }
                     }){
                         @Override
-                        protected Map<String, String> getParams() throws AuthFailureError {
+                        protected Map<String, String> getParams() {
                             Map<String, String > map = new HashMap<>();
                             map.put("name", name.getText().toString());
                             imageView.buildDrawingCache();
@@ -115,22 +105,22 @@ public class AddItemActivity extends AppCompatActivity {
                     MySingleton.getInstance(AddItemActivity.this).addToRequestQueue(request);
                 }
 
-            }
-
         });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == IMAGE_REQUEST && resultCode == RESULT_OK){
-            imageUri = data.getData();
-            try {
-                Bitmap bitmap = getResizedBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri),
-                        320,
-                        320);
-                imageView.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (data != null){
+                imageUri = data.getData();
+                try {
+                    Bitmap bitmap = getResizedBitmap(MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri),
+                            320,
+                            320);
+                    imageView.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
