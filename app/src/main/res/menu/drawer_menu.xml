@@ -18,7 +18,12 @@
             android:title="@string/contact_us_nav"/>
     </group>
 
+    <item
+        android:id="@+id/refresh_products"
+        android:icon="@drawable/ic_refresh"
+        android:title="@string/refresh"/>
     <item android:title="@string/share_and_rate">
+
         <menu>
             <item android:id="@+id/share_app"
                 android:icon="@drawable/ic_share_app"

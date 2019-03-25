@@ -84,6 +84,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 drawer.closeDrawer(GravityCompat.START);
                 searchView.clearFocus();
                 return true;
+            case R.id.refresh_products:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment).commit();
+                drawer.closeDrawer(GravityCompat.START);
+                mainFragment.loadProductList();
+                navigationView.getMenu().getItem(0).setChecked(true);
+                return true;
+
             case R.id.share_app:
                 Toast.makeText(this, "start share app intent", Toast.LENGTH_SHORT).show();
                 drawer.closeDrawer(GravityCompat.START);

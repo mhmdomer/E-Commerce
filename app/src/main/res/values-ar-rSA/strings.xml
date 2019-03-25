@@ -26,4 +26,5 @@
     <string name="add_itme">إضافة</string>
     <string name="search_hint">بحث..</string>
     <string name="not_connected_message">تأكد من اتصالك بالانترنت ثم أعد المحاولة</string>
+    <string name="refresh">إعادة تحميل</string>
 </resources>
