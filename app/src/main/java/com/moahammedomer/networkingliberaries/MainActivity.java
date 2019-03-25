@@ -1,12 +1,9 @@
 package com.moahammedomer.networkingliberaries;
 
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,7 +11,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,16 +22,15 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
 
-    public static boolean firstStart = true;
     public static final String SERVER_URL = "http://mohammedomerali.000webhostapp.com/";
     Toolbar toolbar;
     private DrawerLayout drawer;
-    public static MainFragment mainFragment = null;
     public static final String MAIN_FRAGMENT_TAG = "main tag";
     MenuItem search;
     NavigationView navigationView;
     SearchView searchView;
     public static boolean start = true;
+    public MainFragment mainFragment;
 
 
     @Override
@@ -53,13 +48,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         toggle.syncState();
-        // don't created a new fragment if there is already exist one
-        if (mainFragment == null) {
-            Log.e("main", "main fragment is null");
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        if (mainFragment == null){
             mainFragment = new MainFragment();
         }
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.add(R.id.fragment_container, mainFragment, MAIN_FRAGMENT_TAG).commit();
+        navigationView.getMenu().getItem(0).setChecked(true);
 
     }
 
@@ -141,12 +135,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void search(SearchView searchView) {
-        searchView.setOnSearchClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MainFragment.tab.getTabAt(0).select();
-            }
-        });
+        searchView.setOnSearchClickListener(v -> mainFragment.tab.getTabAt(0).select());
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -164,15 +153,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void getMatchProducts(String search){
         ArrayList<Product> arrayList = new ArrayList<>();
-        int length = MainFragment.allProducts.size();
+        int length = mainFragment.getAllProducts().size();
         for(int i = 0; i < length; i++){
-            if(MainFragment.allProducts.get(i).getName().toLowerCase().contains(search.toLowerCase())){
-                arrayList.add(MainFragment.allProducts.get(i));
+            if(mainFragment.getAllProducts().get(i).getName().toLowerCase().contains(search.toLowerCase())){
+                arrayList.add(mainFragment.getAllProducts().get(i));
             }
         }
-        AllFragment.listener = MainFragment.initListener(this, arrayList);
-        MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(this, arrayList, AllFragment.listener);
-        AllFragment.recyclerView.setAdapter(adapter);
+        mainFragment.setAllFragmentListener(MainFragment.initListener(this, arrayList));
+        mainFragment.setAllFragmentAdapter(new MyRecyclerViewAdapter(
+                this,
+                arrayList, MainFragment.initListener(getApplicationContext(), arrayList)));
     }
 
     @Override
@@ -180,4 +170,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onSaveInstanceState(outState);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        start = true;
+    }
 }
