@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -28,11 +30,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final String SERVER_URL = "http://mohammedomerali.000webhostapp.com/";
     Toolbar toolbar;
     private DrawerLayout drawer;
-    MenuItem search;
     public static MainFragment mainFragment = null;
     public static final String MAIN_FRAGMENT_TAG = "main tag";
+    MenuItem search;
     NavigationView navigationView;
     SearchView searchView;
+    public static boolean start = true;
 
 
     @Override
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         // don't created a new fragment if there is already exist one
         if (mainFragment == null) {
+            Log.e("main", "main fragment is null");
             mainFragment = new MainFragment();
         }
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -64,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()){
             case R.id.main_page:
                 search.setVisible(true);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainFragment(),MAIN_FRAGMENT_TAG).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment,MAIN_FRAGMENT_TAG).commit();
                 drawer.closeDrawer(GravityCompat.START);
                 searchView.clearFocus();
                 return true;
@@ -105,19 +109,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         }
         else if (!(getSupportFragmentManager().findFragmentById(R.id.fragment_container) instanceof MainFragment)){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MainFragment()).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, mainFragment).commit();
             navigationView.getMenu().getItem(0).setChecked(true);
             search.setVisible(true);
         }
         else {
             super.onBackPressed();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        loadProductList();
     }
 
     @Override
@@ -166,15 +164,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void getMatchProducts(String search){
         ArrayList<Product> arrayList = new ArrayList<>();
-        int length = AllFragment.allProducts.size();
+        int length = MainFragment.allProducts.size();
         for(int i = 0; i < length; i++){
-            if(AllFragment.allProducts.get(i).getName().contains(search)){
-                arrayList.add(AllFragment.allProducts.get(i));
+            if(MainFragment.allProducts.get(i).getName().toLowerCase().contains(search.toLowerCase())){
+                arrayList.add(MainFragment.allProducts.get(i));
             }
         }
-        AllFragment.listener = AllFragment.initListener(this, arrayList);
-        AllFragment.adapter = new MyRecyclerViewAdapter(this, arrayList, AllFragment.listener);
-        AllFragment.recyclerView.setAdapter(AllFragment.adapter);
+        AllFragment.listener = MainFragment.initListener(this, arrayList);
+        MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(this, arrayList, AllFragment.listener);
+        AllFragment.recyclerView.setAdapter(adapter);
     }
 
     @Override

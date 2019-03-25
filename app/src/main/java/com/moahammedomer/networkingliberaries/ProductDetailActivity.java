@@ -53,24 +53,26 @@ public class ProductDetailActivity extends AppCompatActivity {
         category = findViewById(R.id.detial_category);
         image = findViewById(R.id.detail_image);
         order = findViewById(R.id.detail_order);
-        description.setText(intent.getExtras().getString(AllFragment.DESCRIPTION_EXTRA));
-        country.setText(intent.getExtras().getString(AllFragment.COUNTRY_EXTRA));
-        category.setText(intent.getExtras().getString(AllFragment.CATEGORY_EXTRA));
+        description.setText(intent.getExtras().getString(MainFragment.DESCRIPTION_EXTRA));
+        country.setText(intent.getExtras().getString(MainFragment.COUNTRY_EXTRA));
+        category.setText(intent.getExtras().getString(MainFragment.CATEGORY_EXTRA));
         Glide.with(this)
-                .load(intent.getExtras().getString(AllFragment.IMAGE_EXTRA))
+                .load(intent.getExtras().getString(MainFragment.IMAGE_EXTRA))
                 .into(image);
         image.setClickable(true);
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                bitmap = ((BitmapDrawable)image.getDrawable()).getBitmap();
-                final Dialog nagDialog = new Dialog(context,android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
-                nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                nagDialog.setCancelable(true);
-                nagDialog.setContentView(R.layout.image_layout);
-                PhotoView view = nagDialog.findViewById(R.id.image_preview);
-                view.setImageBitmap(bitmap);
-                nagDialog.show();
+                if (image.getDrawable() != null) {
+                    bitmap = ((BitmapDrawable) image.getDrawable()).getBitmap();
+                    final Dialog nagDialog = new Dialog(context, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+                    nagDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    nagDialog.setCancelable(true);
+                    nagDialog.setContentView(R.layout.image_layout);
+                    PhotoView view = nagDialog.findViewById(R.id.image_preview);
+                    view.setImageBitmap(bitmap);
+                    nagDialog.show();
+                }
             }
         });
 

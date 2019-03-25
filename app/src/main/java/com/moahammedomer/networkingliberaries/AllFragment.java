@@ -35,17 +35,8 @@ import java.util.Map;
 public class AllFragment extends Fragment {
 
     public static RecyclerView recyclerView;
-    public static MyRecyclerViewAdapter adapter;
-    public static ArrayList<Product> allProducts;
-    ProgressBar progressBar;
+    public static ProgressBar progressBar;
     SearchView sv;
-    private String response_url = MainActivity.SERVER_URL + "request_data.php";
-    public static final String NAME_EXTRA = "name";
-    public static final String IMAGE_EXTRA = "image";
-    public static final String DESCRIPTION_EXTRA = "description";
-    public static final String PRICE_EXTRA = "price";
-    public static final String COUNTRY_EXTRA = "country";
-    public static final String CATEGORY_EXTRA = "category";
     public static MyRecyclerViewAdapter.OnItemClickListener listener;
     View fragment;
 
@@ -62,114 +53,20 @@ public class AllFragment extends Fragment {
             recyclerView.setLayoutManager(layoutManager);
             DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
                     layoutManager.getOrientation());
-            dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity().getApplicationContext(), R.drawable.list_devider));
+            if (getActivity() != null)
+                dividerItemDecoration.setDrawable(ContextCompat.getDrawable(getActivity(), R.drawable.list_devider));
             recyclerView.addItemDecoration(dividerItemDecoration);
             // for caching images
             recyclerView.setHasFixedSize(true);
             recyclerView.setItemViewCacheSize(20);
             recyclerView.setDrawingCacheEnabled(true);
             recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-            allProducts = new ArrayList<>();
-            listener = initListener(getActivity(), allProducts);
-            adapter = new MyRecyclerViewAdapter(getActivity(), allProducts, listener);
-            loadProductList();
+        }else {
+            recyclerView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
         }
         return fragment;
     }
 
-    public static MyRecyclerViewAdapter.OnItemClickListener  initListener(Context context, ArrayList<Product> list){
-        MyRecyclerViewAdapter.OnItemClickListener mlistener  = (view, position) ->{
-            Intent intent = new Intent(context, ProductDetailActivity.class);
-            Product product = list.get(position);
-            intent.putExtra(NAME_EXTRA, product.getName());
-            intent.putExtra(PRICE_EXTRA, product.getPrice());
-            intent.putExtra(DESCRIPTION_EXTRA, product.getDescription());
-            intent.putExtra(COUNTRY_EXTRA, product.getCountry());
-            intent.putExtra(CATEGORY_EXTRA, product.getCategory());
-            intent.putExtra(IMAGE_EXTRA, product.getImageUrl());
-            context.startActivity(intent);
 
-        };
-        return mlistener;
-    }
-
-    public void loadProductList(){
-
-        Log.e("main", "requesting");
-        StringRequest request = new StringRequest(Request.Method.POST, response_url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONArray array = new JSONArray(response);
-                            allProducts.clear();
-                            for(int i = 0; i < array.length(); i++){
-                                JSONObject object = array.getJSONObject(i);
-                                allProducts.add(new Product(object.getInt("id"),
-                                        object.getString("name"),
-                                        object.getDouble("price"),
-                                        object.getString("description"),
-                                        object.getString("category"),
-                                        object.getString("country")));
-                            }
-                            progressBar.setVisibility(View.GONE);
-                            recyclerView.setVisibility(View.VISIBLE);
-                            recyclerView.setAdapter(adapter);
-                            adapter.notifyDataSetChanged();
-                            ArrayList<Product> firstCategoryList = new ArrayList<Product>();
-                            ArrayList<Product> secondCategoryList = new ArrayList<Product>();
-                            ArrayList<Product> thirdCategoryList = new ArrayList<Product>();
-                            for (int i = 0; i < allProducts.size(); i++){
-                                switch (allProducts.get(i).getCategory()){
-                                    case MainFragment.CAT1:
-                                        firstCategoryList.add(allProducts.get(i));
-                                        break;
-                                    case MainFragment.CAT2:
-                                        secondCategoryList.add(allProducts.get(i));
-                                        break;
-                                    case MainFragment.CAT3:
-                                        thirdCategoryList.add(allProducts.get(i));
-                                        break;
-                                }
-                            }
-                            if (getActivity() != null){
-                                MyRecyclerViewAdapter firstCategoryAdapter = new MyRecyclerViewAdapter(getActivity().getApplicationContext(),
-                                        firstCategoryList,
-                                        initListener(getActivity().getApplicationContext(), firstCategoryList));
-                                MyRecyclerViewAdapter secondCategoryAdapter = new MyRecyclerViewAdapter(getActivity().getApplicationContext(),
-                                        secondCategoryList,
-                                        initListener(getActivity().getApplicationContext(), secondCategoryList));
-                                MyRecyclerViewAdapter thirdCategoryAdapter = new MyRecyclerViewAdapter(getActivity().getApplicationContext(),
-                                        thirdCategoryList,
-                                        initListener(getActivity().getApplicationContext(), thirdCategoryList));
-                                Category1Fragment.progressBar.setVisibility(View.GONE);
-                                Category2Fragment.progressBar.setVisibility(View.GONE);
-                                Category3Fragment.progressBar.setVisibility(View.GONE);
-                                Category1Fragment.recyclerView.setVisibility(View.VISIBLE);
-                                Category2Fragment.recyclerView.setVisibility(View.VISIBLE);
-                                Category3Fragment.recyclerView.setVisibility(View.VISIBLE);
-                                Category1Fragment.recyclerView.setAdapter(firstCategoryAdapter);
-                                Category2Fragment.recyclerView.setAdapter(secondCategoryAdapter);
-                                Category3Fragment.recyclerView.setAdapter(thirdCategoryAdapter);
-                            }
-                        } catch (JSONException e) {
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getContext().getApplicationContext(), error.getMessage() + "error accured", Toast.LENGTH_SHORT).show();
-                // TODO pop up a dialog to check internet connection and try again
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                return map;
-            }
-        };
-
-        MySingleton.getInstance(getActivity()).addToRequestQueue(request);
-    }
 }
