@@ -16,6 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -174,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         mainFragment.setAllFragmentListener(MainFragment.initListener(this, arrayList));
         mainFragment.setAllFragmentAdapter(new MyRecyclerViewAdapter(
+                Glide.with(this),
                 this,
                 arrayList, MainFragment.initListener(getApplicationContext(), arrayList)));
     }

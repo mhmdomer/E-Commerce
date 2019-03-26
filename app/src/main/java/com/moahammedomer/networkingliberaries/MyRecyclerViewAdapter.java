@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -29,12 +32,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     private OnItemClickListener listener;
     private Context context;
     private int lastPosition = 4;
+    private RequestManager glide;
 
     public interface OnItemClickListener{
         void onItemClick(View view, int position);
     }
 
-    MyRecyclerViewAdapter(Context context, ArrayList<Product> data, OnItemClickListener listener){
+    MyRecyclerViewAdapter(RequestManager glide, Context context, ArrayList<Product> data, OnItemClickListener listener){
+        this.glide = glide;
         this.mInflater = LayoutInflater.from(context.getApplicationContext());
         this.myList = data;
         this.listener = listener;
@@ -50,31 +55,34 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
     @Override
     public void onBindViewHolder(@NonNull MyRecyclerViewAdapter.ViewHolder viewHolder, int i) {
         Product product = myList.get(i);
-        viewHolder.price.setText(String.valueOf(Math.round(product.getPrice())) + " " + context.getString(R.string.SDG_unit));
-        viewHolder.description.setText(product.getDescription());
-        viewHolder.title.setText(product.getName());
-        // this context.getApplicationContext fixed the crash after restarting the app after clicking the back button
-        Glide.with(context.getApplicationContext())
-                .load(product.getImageUrl())
-//                .override(200, 200)
-                .listener(new RequestListener<Drawable>() {
-                    @Override
-                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                        viewHolder.progressBar.setVisibility(View.GONE);
-                        viewHolder.image.setImageDrawable(resource);
-                        return true;
-                    }
-                })
-                .into(viewHolder.image);
-        if (i > lastPosition){
-            Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.up_from_bottom);
-            viewHolder.itemView.startAnimation(animation);
-            lastPosition = i;
+        if (product != null){
+            viewHolder.price.setText(String.valueOf(Math.round(product.getPrice())) + " " + context.getString(R.string.SDG_unit));
+            viewHolder.description.setText(product.getDescription());
+            viewHolder.title.setText(product.getName());
+            // this context.getApplicationContext fixed the crash after restarting the app after clicking the back button
+            Picasso.get().load(product.getImageUrl())
+                .resize(200, 200)
+                    .placeholder(R.drawable.progress_animated)
+//                    .listener(new RequestListener<Drawable>() {
+//                        @Override
+//                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+//                            return false;
+//                        }
+//
+//                        @Override
+//                        public synchronized boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+//                            viewHolder.image.setImageDrawable(resource);
+//                            viewHolder.image.setImageDrawable(resource);
+//                            Log.e("main", "loading into " + product.getName());
+//                            return true;
+//                        }
+//                    })
+                    .into(viewHolder.image);
+            if (i > lastPosition){
+                Animation animation = AnimationUtils.loadAnimation(context.getApplicationContext(), R.anim.up_from_bottom);
+                viewHolder.itemView.startAnimation(animation);
+                lastPosition = i;
+            }
         }
     }
 
@@ -93,7 +101,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         TextView title, description, price;
         ImageView image;
         private OnItemClickListener mListener;
-        ProgressBar progressBar;
 
         ViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
@@ -103,7 +110,6 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
             description = itemView.findViewById(R.id.description);
             price = itemView.findViewById(R.id.price);
             image = itemView.findViewById(R.id.item_image);
-            progressBar = itemView.findViewById(R.id.loading_indicator);
         }
 
         @Override

@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.StringRequest;
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -159,6 +160,9 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
                     try {
                         JSONArray array = new JSONArray(response);
                         allProducts.clear();
+                        firstCategoryList.clear();
+                        secondCategoryList.clear();
+                        thirdCategoryList.clear();
                         for(int i = 0; i < array.length(); i++){
                             JSONObject object = array.getJSONObject(i);
                             allProducts.add(new Product(object.getInt("id"),
@@ -210,16 +214,21 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
 
     private void makeAndAttachAdapters() {
         if (getActivity() != null){
-            MyRecyclerViewAdapter allCategoriesAdapter = new MyRecyclerViewAdapter(getActivity().getApplicationContext(),
+            // use getApplicationContext to load the list even if the user navigated to any part of the app
+            MyRecyclerViewAdapter allCategoriesAdapter = new MyRecyclerViewAdapter(Glide.with(getActivity().getApplicationContext()),
+                    getActivity().getApplicationContext(),
                     allProducts,
                     initListener(getActivity().getApplicationContext(), allProducts));
-            MyRecyclerViewAdapter firstCategoryAdapter = new MyRecyclerViewAdapter(getActivity().getApplicationContext(),
+            MyRecyclerViewAdapter firstCategoryAdapter = new MyRecyclerViewAdapter(Glide.with(getActivity().getApplicationContext()),
+                    getActivity().getApplicationContext(),
                     firstCategoryList,
                     initListener(getActivity().getApplicationContext(), firstCategoryList));
-            MyRecyclerViewAdapter secondCategoryAdapter = new MyRecyclerViewAdapter(getActivity().getApplicationContext(),
+            MyRecyclerViewAdapter secondCategoryAdapter = new MyRecyclerViewAdapter(Glide.with(getActivity().getApplicationContext()),
+                    getActivity().getApplicationContext(),
                     secondCategoryList,
                     initListener(getActivity().getApplicationContext(), secondCategoryList));
-            MyRecyclerViewAdapter thirdCategoryAdapter = new MyRecyclerViewAdapter(getActivity().getApplicationContext(),
+            MyRecyclerViewAdapter thirdCategoryAdapter = new MyRecyclerViewAdapter(Glide.with(getActivity().getApplicationContext()),
+                    getActivity().getApplicationContext(),
                     thirdCategoryList,
                     initListener(getActivity().getApplicationContext(), thirdCategoryList));
             displayList();

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
+import com.squareup.picasso.Picasso;
 
 import java.util.Objects;
 
@@ -57,8 +58,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         description.setText(intent.getExtras().getString(MainFragment.DESCRIPTION_EXTRA));
         country.setText(intent.getExtras().getString(MainFragment.COUNTRY_EXTRA));
         category.setText(intent.getExtras().getString(MainFragment.CATEGORY_EXTRA));
-        Glide.with(this)
+        Picasso.get()
                 .load(intent.getExtras().getString(MainFragment.IMAGE_EXTRA))
+                .placeholder(R.drawable.progress_animated)
                 .into(image);
         image.setClickable(true);
         image.setOnClickListener(v -> {
