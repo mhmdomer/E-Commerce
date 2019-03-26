@@ -12,9 +12,18 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
         android:text="No Internet Connection"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/image_no_internet"
+        android:id="@+id/text"
         android:textSize="30dp"/>
+    <ImageView
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_centerInParent="true"
+        android:id="@+id/image_no_internet"
+        android:src="@drawable/ic_no_internet"
+        />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navigationView.getMenu().getItem(0).setChecked(true);
                 search.setVisible(true);
                 return true;
-
             case R.id.share_app:
                 Toast.makeText(this, "start share app intent", Toast.LENGTH_SHORT).show();
                 drawer.closeDrawer(GravityCompat.START);
@@ -147,12 +146,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                if (!Objects.requireNonNull(mainFragment.tab.getTabAt(0)).isSelected()){
+                    Objects.requireNonNull(mainFragment.tab.getTabAt(0)).select();
+                }
                 searchView.clearFocus();
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (!Objects.requireNonNull(mainFragment.tab.getTabAt(0)).isSelected()){
+                    Objects.requireNonNull(mainFragment.tab.getTabAt(0)).select();
+                }
                 getMatchProducts(newText);
                 return true;
             }

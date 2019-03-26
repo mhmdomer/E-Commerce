@@ -55,6 +55,7 @@
         android:paddingStart="12dp"
         android:layout_below="@id/detail_country"
         android:layout_marginBottom="10dp"
+        style=""
         android:text="Medical"/>
 
     <TextView
@@ -84,11 +85,14 @@
 
     </ScrollView>
     <Button
-        android:layout_width="wrap_content"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="8dp"
         android:id="@+id/detail_order"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:elevation="6dp"
         android:text="Order Item"
         android:layout_margin="10dp"/>
 

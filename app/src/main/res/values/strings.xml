@@ -26,4 +26,5 @@
     <string name="search_hint">Search</string>
     <string name="not_connected_message">Check your internet connection and try again</string>
     <string name="refresh">Refresh</string>
+    <string name="not_connected_to_a_network_message">Please make sure that you have an internet connection</string>
 </resources>

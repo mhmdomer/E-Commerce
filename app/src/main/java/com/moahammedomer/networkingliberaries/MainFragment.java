@@ -50,6 +50,7 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
     public static final String PRICE_EXTRA = "price";
     public static final String COUNTRY_EXTRA = "country";
     public static final String CATEGORY_EXTRA = "category";
+    public static boolean error = false;
     public ArrayList<Product> allProducts;
     public ArrayList<Product> firstCategoryList;
     public ArrayList<Product> secondCategoryList;
@@ -87,7 +88,7 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
         tab = fragment.findViewById(R.id.tab_layout);
         tab.setTabMode(TabLayout.MODE_SCROLLABLE);
         tab.setupWithViewPager(pager);
-        if (MainActivity.start){
+        if (MainActivity.start || error){
             allProducts = new ArrayList<>();
             firstCategoryList = new ArrayList<>();
             secondCategoryList = new ArrayList<>();
@@ -154,6 +155,7 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
         String response_url = MainActivity.SERVER_URL + "request_data.php";
         StringRequest request = new StringRequest(Request.Method.POST, response_url,
                 response -> {
+                    this.error = false;
                     try {
                         JSONArray array = new JSONArray(response);
                         allProducts.clear();
@@ -188,12 +190,14 @@ public class MainFragment extends Fragment implements TabLayout.OnTabSelectedLis
                         }
                     }
                 }, error -> {
-                    if (getContext() != null){
-                        if (getActivity() != null){
-                            Toast.makeText(getContext().getApplicationContext(), error.getMessage() + "error accured", Toast.LENGTH_SHORT).show();
-                        }
+                    this.error = true;
+                    if (getActivity() != null){
+                        Toast.makeText(getActivity().getApplicationContext(), error.getMessage() + "error accured", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getActivity().getApplicationContext(), NoInternetConnection.class));
+                        MainActivity.start = true;
+                        getActivity().finish();
+                        this.error = false;
                     }
-                    // TODO pop up a dialog to check internet connection and try again
                 }){
             @Override
             protected Map<String, String> getParams() {

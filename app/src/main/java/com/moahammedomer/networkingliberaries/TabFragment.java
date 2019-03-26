@@ -43,9 +43,6 @@ public class TabFragment extends Fragment {
             recyclerView.setItemViewCacheSize(20);
             recyclerView.setDrawingCacheEnabled(true);
             recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-        }else {
-            recyclerView.setVisibility(View.VISIBLE);
-            progressBar.setVisibility(View.GONE);
         }
         return fragment;
     }
